@@ -42,6 +42,8 @@ dependencies:
 
   # alarm
   flutter_local_notifications: ^9.1.5
+
+  #timezone
   flutter_native_timezone: ^2.0.0
 
 dev_dependencies:
