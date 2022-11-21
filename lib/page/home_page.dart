@@ -19,9 +19,9 @@ class _HomePageState extends State<HomePage> {
         children: [
           ElevatedButton(onPressed: () {
             Fluttertoast.showToast(
-                msg: "This is Center Short Toast",
+                msg: "안녕!",
                 toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
+                gravity: ToastGravity.BOTTOM,
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.red,
                 textColor: Colors.white,
