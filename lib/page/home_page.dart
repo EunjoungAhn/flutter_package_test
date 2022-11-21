@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:study_package/main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,19 +34,45 @@ class _HomePageState extends State<HomePage> {
         children: [
           ElevatedButton(onPressed: () {
             _showToast();
-            /*
-            Fluttertoast.showToast(
-                msg: "안녕!",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0
-            );
-            */
           },
           child: const Text('btn'),
+        ),
+        // 알람 추가 버튼
+        ElevatedButton(onPressed: () async {
+            final notification = flutterLocalNotificationsPlugin;
+
+            const android =  AndroidNotificationDetails(
+              '0',// id는 유니크해야 한다. Test용이기 때문에 0을 넣었다.
+              '알림테스트',
+              channelDescription: '알림 테스트 바디 부분',
+              importance: Importance.max,
+              priority: Priority.max,
+            );
+            const ios = IOSNotificationDetails();
+            const detail = NotificationDetails(
+              android: android,
+              iOS: ios,
+            );
+
+          final permission = Platform.isAndroid
+              ? true
+              : ((await notification.resolvePlatformSpecificImplementation<
+                          IOSFlutterLocalNotificationsPlugin>()
+                      ?.requestPermissions(alert: true, badge: true, sound: true)) ??
+                  false);
+            if(!permission){// permission이 아닐때 나가는 코드로 임시 작성
+              return;
+            }
+            //permission이 true인 사람만 show 실행
+            await flutterLocalNotificationsPlugin.show(
+            0,// 유니크해야 한다. Test 용으로 하드코딩했다.
+            'plain title',
+            'plain body',
+            detail,
+            );
+
+          },
+          child: const Text('add alarm'),
         ),
         const Center(child: Text('hi'),)
       ]
