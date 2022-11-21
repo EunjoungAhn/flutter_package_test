@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:study_package/main.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -64,13 +67,37 @@ class _HomePageState extends State<HomePage> {
               return;
             }
             //permission이 true인 사람만 show 실행
+            /*
             await flutterLocalNotificationsPlugin.show(
             0,// 유니크해야 한다. Test 용으로 하드코딩했다.
             'plain title',
             'plain body',
             detail,
             );
+            */
 
+          // 타임존 셋팅 필요
+          final now = tz.TZDateTime.now(tz.local);
+          var notiDay = now.day;
+
+            await notification.zonedSchedule(
+            1,
+            'alarmTitle',
+            'alarmDescription',
+            tz.TZDateTime(
+              tz.local,
+              now.year,
+              now.month,
+              now.day,
+              now.hour,
+              now.minute + 1,
+            ),
+            detail,
+            androidAllowWhileIdle: true, //기계가 저전력일때 알람을 띄울지 말지
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime,
+            matchDateTimeComponents: DateTimeComponents.time,
+          );
           },
           child: const Text('add alarm'),
         ),
